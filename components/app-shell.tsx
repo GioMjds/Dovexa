@@ -1,7 +1,8 @@
 'use client';
 
-import * as React from 'react';
+import { ReactNode, useState } from 'react';
 import Link from 'next/link';
+import Href from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Building2,
@@ -30,10 +31,10 @@ export function AppShell({
   children,
 }: {
   email: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const pathname = usePathname();
-  const [loggerOpen, setLoggerOpen] = React.useState(false);
+  const [loggerOpen, setLoggerOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-background">
@@ -70,7 +71,7 @@ export function AppShell({
             return (
               <Link
                 key={href}
-                href={href as any}
+                href={href as keyof typeof Href}
                 className={cn(
                   'flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors',
                   active
@@ -103,10 +104,7 @@ export function AppShell({
 
       <main className="min-w-0 flex-1 p-6">{children}</main>
 
-      <QuickInteractionLogger
-        open={loggerOpen}
-        onOpenChange={setLoggerOpen}
-      />
+      <QuickInteractionLogger open={loggerOpen} onOpenChange={setLoggerOpen} />
     </div>
   );
 }
