@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MethodType {
+  EMAIL
+  PHONE
+  LINKEDIN
+  FACEBOOK
+  INSTAGRAM
+  OTHER
+}
+
+enum InteractionType {
+  CALL
+  MEETING
+  MESSAGE
+  EMAIL
+  OTHER
+}
+
+enum TaskStatus {
+  OPEN
+  DONE
+}
+
+/// Mirrors auth.users.id from Supabase Auth.
+model Profile {
+  id        String   @id @db.Uuid
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  contacts       Contact[]
+  contactMethods ContactMethod[]
+  organizations  Organization[]
+  interactions   Interaction[]
+  notes          Note[]
+  tasks          Task[]
+  tags           Tag[]
+  contactTags    ContactTag[]
+  importantDates ImportantDate[]
+
+  @@map("profiles")
+}
+
+model Organization {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  userId    String   @db.Uuid
+  name      String
+  website   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contacts Contact[]
+
+  @@unique([userId, name])
+  @@map("organizations")
+}
+
+model Contact {
+  id               String    @id @default(uuid(7)) @db.Uuid
+  userId           String    @db.Uuid
+  firstName        String
+  lastName         String?
+  nickname         String?
+  title            String?
+  organizationId   String?   @db.Uuid
+  contactEveryDays Int?
+  /// Denormalized. Only update inside the log-interaction transaction.
+  lastContactedAt  DateTime?
+  archivedAt       DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  user           Profile         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization   Organization?   @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  methods        ContactMethod[]
+  interactions   Interaction[]
+  notes          Note[]
+  tasks          Task[]
+  tags           ContactTag[]
+  importantDates ImportantDate[]
+
+  @@index([userId, archivedAt])
+  @@index([userId, lastContactedAt])
+  @@index([organizationId])
+  @@map("contacts")
+}
+
+model ContactMethod {
+  id        String     @id @default(uuid(7)) @db.Uuid
+  userId    String     @db.Uuid
+  contactId String     @db.Uuid
+  type      MethodType
+  value     String
+  label     String?
+  isPrimary Boolean    @default(false)
+
+  user    Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@index([contactId])
+  @@index([userId, type, value])
+  @@map("contact_methods")
+}
+
+model Interaction {
+  id         String          @id @default(uuid(7)) @db.Uuid
+  userId     String          @db.Uuid
+  contactId  String          @db.Uuid
+  type       InteractionType
+  occurredAt DateTime
+  summary    String
+  createdAt  DateTime        @default(now())
+
+  user    Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@index([contactId, occurredAt(sort: Desc)])
+  @@index([userId, occurredAt(sort: Desc)])
+  @@map("interactions")
+}
+
+model Note {
+  id        String   @id @default(uuid(7)) @db.Uuid
+  userId    String   @db.Uuid
+  contactId String   @db.Uuid
+  body      String
+  pinned    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@index([contactId, createdAt(sort: Desc)])
+  @@map("notes")
+}
+
+model Task {
+  id          String     @id @default(uuid(7)) @db.Uuid
+  userId      String     @db.Uuid
+  contactId   String?    @db.Uuid
+  title       String
+  dueAt       DateTime?
+  status      TaskStatus @default(OPEN)
+  completedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  user    Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact Contact? @relation(fields: [contactId], references: [id], onDelete: SetNull)
+
+  @@index([userId, status, dueAt])
+  @@index([contactId])
+  @@map("tasks")
+}
+
+model Tag {
+  id     String  @id @default(uuid(7)) @db.Uuid
+  userId String  @db.Uuid
+  name   String
+  color  String?
+
+  user     Profile      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contacts ContactTag[]
+
+  @@unique([userId, name])
+  @@map("tags")
+}
+
+model ContactTag {
+  userId    String @db.Uuid
+  contactId String @db.Uuid
+  tagId     String @db.Uuid
+
+  user    Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  tag     Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([contactId, tagId])
+  @@index([tagId])
+  @@index([userId])
+  @@map("contact_tags")
+}
+
+model ImportantDate {
+  id        String @id @default(uuid(7)) @db.Uuid
+  userId    String @db.Uuid
+  contactId String @db.Uuid
+  label     String
+  month     Int
+  day       Int
+  year      Int?
+
+  user    Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contact Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+
+  @@index([contactId])
+  @@index([userId, month, day])
+  @@map("important_dates")
+}

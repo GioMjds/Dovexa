@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-19T09:15:00.000Z",
+  "title": "Design System: Dovexa",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Electric Indigo",
+        "canonical": "oklch(0.53 0.24 275)",
+        "tonalRamp": ["#1e1b4b", "#312e81", "#3730a3", "#4338ca", "#4f46e5", "#6366f1", "#818cf8", "#c7d2fe"]
+      },
+      "primary-dark": {
+        "role": "primary",
+        "displayName": "Electric Slate Indigo",
+        "canonical": "oklch(0.67 0.16 275)",
+        "tonalRamp": ["#1e1b4b", "#312e81", "#3730a3", "#4338ca", "#4f46e5", "#6366f1", "#818cf8", "#c7d2fe"]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Cool Canvas",
+        "canonical": "oklch(0.98 0.006 247)",
+        "tonalRamp": ["#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f8fafc"]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Deep Slate Ink",
+        "canonical": "oklch(0.20 0.03 260)",
+        "tonalRamp": ["#020617", "#0f172a", "#1e293b", "#334155", "#475569", "#64748b", "#cbd5e1", "#f8fafc"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "High-level section anchors and modal titles." },
+      "headline": { "displayName": "Headline", "purpose": "Page headers, contact names, and organization banners." },
+      "title": { "displayName": "Title", "purpose": "Card titles, group dividers, and timeline dates." },
+      "body": { "displayName": "Body", "purpose": "Interaction logs, notes, and profile details." },
+      "label": { "displayName": "Label", "purpose": "Metadata chips, status tags, table headers, and shortcuts." }
+    },
+    "shadows": [
+      { "name": "overlay-dropdown", "value": "0 4px 12px rgba(15, 23, 42, 0.08)", "purpose": "Popovers, select menus, command palettes." },
+      { "name": "modal-dialog", "value": "0 12px 32px rgba(15, 23, 42, 0.16)", "purpose": "Centered modal dialogs requiring focus isolation." }
+    ],
+    "motion": [
+      { "name": "ease-out-snappy", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Default easing for fast, crisp micro-interactions." },
+      { "name": "duration-fast", "value": "150ms", "purpose": "State feedback and hover transitions." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary action trigger (Log Interaction, Save Contact).",
+      "html": "<button class=\"ds-btn-primary\">Log Interaction</button>",
+      "css": ".ds-btn-primary { background: #4f46e5; color: #ffffff; padding: 8px 16px; font-size: 14px; font-weight: 500; font-family: var(--font-sans, inherit); border: 1px solid transparent; border-radius: 8px; cursor: pointer; transition: background 0.15s ease, transform 0.1s ease; } .ds-btn-primary:hover { background: #4338ca; } .ds-btn-primary:active { transform: scale(0.99); } .ds-btn-primary:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary action or cancel trigger.",
+      "html": "<button class=\"ds-btn-secondary\">Cancel</button>",
+      "css": ".ds-btn-secondary { background: #f1f5f9; color: #0f172a; padding: 8px 16px; font-size: 14px; font-weight: 500; font-family: var(--font-sans, inherit); border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease; } .ds-btn-secondary:hover { background: #e2e8f0; } .ds-btn-secondary:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Standard form text input field.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Search contacts...\" />",
+      "css": ".ds-input { background: #ffffff; color: #0f172a; padding: 8px 12px; font-size: 14px; font-family: var(--font-sans, inherit); border: 1px solid #e2e8f0; border-radius: 8px; outline: none; width: 100%; transition: border-color 0.15s ease, box-shadow 0.15s ease; } .ds-input::placeholder { color: #64748b; } .ds-input:focus { border-color: #4f46e5; box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.15); }"
+    },
+    {
+      "name": "Content Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Flat content container with 1px border boundary.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">Recent Interaction</div><div class=\"ds-card-body\">Discussed seed round terms over coffee.</div></div>",
+      "css": ".ds-card { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; font-family: var(--font-sans, inherit); } .ds-card-title { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 8px; } .ds-card-body { font-size: 14px; color: #64748b; line-height: 1.5; }"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Compact metadata chip for tags and cadences.",
+      "html": "<span class=\"ds-badge\">Follow-up Overdue</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; background: #fef3c7; color: #92400e; font-size: 12px; font-weight: 500; padding: 2px 8px; border-radius: 6px; font-family: var(--font-sans, inherit); border: 1px solid #fde68a; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Focused Operator",
+    "overview": "Dovexa is a sharp, uncluttered command center built for decisive action and instant recall. Designed for solo professionals and founders managing personal and professional relationships, every element is tuned for speed, density, and clarity. The interface recedes quietly into the background until summoned, prioritizing rapid data entry and calm prioritization over decorative noise.\n\nThe visual system explicitly rejects the bloated visual idioms of enterprise sales platforms. There are no conversion funnels, pipeline Kanban boards, aggressive KPI metrics, or patronizing gamification. Instead, Dovexa channels the focused, utilitarian craft of Linear and Raycast: crisp 1px borders, subtle surface shifts, rapid keyboard navigation, and immediate responsiveness.",
+    "keyCharacteristics": [
+      "Utilitarian density: Balanced whitespace designed for efficient scanning without feeling claustrophobic.",
+      "Subtle tonal layering: 1px borders and slight background shifts define structure; depth is functional, never decorative.",
+      "Keyboard-native immediacy: Clear visual focus rings and prominent keybinding affordances across all primary actions.",
+      "Quiet restraint: Color is reserved strictly for focal points, priority indicators, and interactive states."
+    ],
+    "rules": [
+      {
+        "name": "The Rarity Rule",
+        "body": "Primary accent color (#4f46e5) must occupy no more than 10% of any visible viewport. Its scarcity ensures instant visual prioritization.",
+        "section": "colors"
+      },
+      {
+        "name": "The No-Colored-Stripe Rule",
+        "body": "Never use thick 2px+ colored left borders on cards or list items for status. Convey state with subtle badges or semantic chips instead.",
+        "section": "colors"
+      },
+      {
+        "name": "The Balance Rule",
+        "body": "Always apply text-wrap: balance to H1–H3 headers to ensure even optical weight across lines.",
+        "section": "typography"
+      },
+      {
+        "name": "The Floor Rule",
+        "body": "Display letter-spacing must never drop tighter than -0.04em; keep headlines sharp, not cramped.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-At-Rest Rule",
+        "body": "In-page cards and list containers must remain completely flat without ambient drop shadows. Elevation is reserved strictly for detached overlays.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do prioritize keyboard shortcuts with visible shortcut indicators (⌘K, C, L).",
+      "Do use 1px solid borders (#e2e8f0) to structure cards and timeline records.",
+      "Do maintain a strict 4.5:1 text contrast ratio on all body copy, inputs, and placeholders.",
+      "Do cap body text line length at 65–75ch for effortless reading.",
+      "Do provide instant visual feedback on interactive states via fast transitions (150ms ease-out)."
+    ],
+    "donts": [
+      "Don't add enterprise SaaS bloat: no deal stages, sales pipelines, conversion funnels, or aggressive quota badges (Salesforce, HubSpot anti-patterns).",
+      "Don't use playground / toy aesthetics: no cartoon mascots, confetti bursts, hand-drawn doodles, or patronizing gamification.",
+      "Don't fall into unstructured spreadsheet fatigue: do not render raw unstyled Airtable grids without clear relational hierarchy.",
+      "Don't use thick side-stripe accent borders (border-l-4) on cards or alerts.",
+      "Don't use text gradients or blurred glassmorphism on utilitarian dashboard surfaces.",
+      "Don't use oversized border-radii (24px+) on content cards."
+    ]
+  }
+}
